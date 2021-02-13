@@ -1,4 +1,6 @@
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wanandroid_demo/home/HomePage.dart';
 import 'package:wanandroid_demo/publics/PublicPage.dart';
 import 'package:wanandroid_demo/questions/QuestionPage.dart';
@@ -7,6 +9,9 @@ import 'package:wanandroid_demo/system/SystemPage.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 
+import 'ColorsConfig.dart';
+import 'app_provider.dart';
+
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
@@ -14,7 +19,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
-  static const Color PrimaryColor = Color(0xFF16213f);
+  // static const Color PrimaryColor = Color(0xFF16213f);
+  // static const Color PrimaryColor = Color(0xFFBE1C2A);
   static const Color tab_color = Colors.grey;
   var _title = "首页";
   var tabs = ["首页", "广场", "公众号", "体系", "问答"];
@@ -28,17 +34,17 @@ class _MainPageState extends State<MainPage>
     QuestionPage()
   ];
 
+  String themeColor;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PrimaryColor,
       appBar: AppBar(
         title: Text(_title,
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
             )),
-
         centerTitle: true,
         actions: [
           IconButton(
@@ -52,25 +58,26 @@ class _MainPageState extends State<MainPage>
             highlightColor: Colors.transparent, // 按钮按下时的背景色
           )
         ],
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.menu,
-        //     color: Colors.white,
-        //   ),
-        //   onPressed: () {
-        //     Scaffold.of(context).openDrawer();
-        //   },
-        //   splashColor: Colors.transparent,
-        //   highlightColor: Colors.transparent,
-        // ),
         brightness: Brightness.dark,
+        automaticallyImplyLeading: false,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: new Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
       ),
       body: Container(
+        color: ColorsConfig.themeColorMap[themeColor],
         child: _pages[_currentIndex],
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(themeColor),
+      drawerScrimColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: PrimaryColor,
+        backgroundColor: ColorsConfig.themeColorMap[themeColor],
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
           BottomNavigationBarItem(icon: Icon(Icons.crop_square), label: "广场"),
@@ -104,19 +111,31 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
+    _initTheme();
+  }
+
+  Future _initTheme() async {
+    await SpUtil.getInstance();
+    themeColor = SpUtil.getString("key_theme_color", defValue: "blue");
+    Provider.of<AppInfoProvider>(context, listen: false).setTheme(themeColor);
   }
 }
 
 //抽屉组件
+
 class MyDrawer extends StatelessWidget {
-  // final Color color = Color(0xFF203457);
-  final Color drawerColor = Color(0xFF16213f);
+  String _drawerColor;
+  MyDrawer(String color) {
+    _drawerColor = color;
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Drawer(
+      elevation: 0.0,
       child: Container(
-        color: drawerColor,
+        color: ColorsConfig.themeColorMap[_drawerColor],
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -265,13 +284,45 @@ class MyDrawer extends StatelessWidget {
                 color: Colors.white,
               ),
               onTap: () async {
-                await SystemChannels.platform
-                    .invokeMethod('SystemNavigator.pop');
+                await _showExitAppDialog(context);
               },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future _showExitAppDialog(context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "提示",
+          ),
+          content: Text(
+            "是否退出应用?",
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "取消",
+                )),
+            FlatButton(
+              onPressed: () {
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },
+              child: Text(
+                "退出",
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
