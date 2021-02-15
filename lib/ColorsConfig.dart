@@ -21,4 +21,7 @@ class ColorsConfig {
     'teal': Colors.teal,
     'black': Colors.black,
   };
+
+  static Color primaryColor = Color(0xFF16213f);
+  // static Color primaryColor = Colors.orange;
 }

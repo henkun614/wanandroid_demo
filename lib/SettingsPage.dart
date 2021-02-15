@@ -1,12 +1,9 @@
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'ColorsConfig.dart';
-import 'app_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -84,7 +81,7 @@ class _SettingsState extends State<SettingsPage> {
               subtitle: _subTitle("更换背景颜色"),
               trailing: _icon(),
               onTap: () {
-                _showModalBottomSheet();
+                // _showModalBottomSheet();
               },
             ),
             ListTile(
@@ -129,7 +126,7 @@ class _SettingsState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _getCount();
-    _initTheme();
+    // _initTheme();
   }
 
   // 加载缓存
@@ -224,47 +221,47 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   // 弹出底部菜单列表模态对话框
-  Future<int> _showModalBottomSheet() {
-    return showModalBottomSheet<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(8),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: ColorsConfig.themeColorMap.keys.map((key) {
-              Color value = ColorsConfig.themeColorMap[key];
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    _colorKey = key;
-                  });
-                  SpUtil.putString('key_theme_color', key);
-                  Provider.of<AppInfoProvider>(context, listen: false)
-                      .setTheme(key);
-                },
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  color: value,
-                  child: _colorKey == key
-                      ? Icon(
-                          Icons.done,
-                          color: Colors.white,
-                        )
-                      : null,
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
+  // Future<int> _showModalBottomSheet() {
+  //   return showModalBottomSheet<int>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(8),
+  //         child: Wrap(
+  //           spacing: 8,
+  //           runSpacing: 8,
+  //           children: ColorsConfig.themeColorMap.keys.map((key) {
+  //             Color value = ColorsConfig.themeColorMap[key];
+  //             return InkWell(
+  //               // onTap: () {
+  //               //   setState(() {
+  //               //     _colorKey = key;
+  //               //   });
+  //               //   SpUtil.putString('key_theme_color', key);
+  //               //   Provider.of<AppInfoProvider>(context, listen: false)
+  //               //       .setTheme(key);
+  //               // },
+  //               child: Container(
+  //                 width: 40,
+  //                 height: 40,
+  //                 color: value,
+  //                 child: _colorKey == key
+  //                     ? Icon(
+  //                         Icons.done,
+  //                         color: Colors.white,
+  //                       )
+  //                     : null,
+  //               ),
+  //             );
+  //           }).toList(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future _initTheme() async {
-    await SpUtil.getInstance();
-    themeColor = SpUtil.getString("key_theme_color", defValue: "blue");
-  }
+  // Future _initTheme() async {
+  //   await SpUtil.getInstance();
+  //   themeColor = SpUtil.getString("key_theme_color", defValue: "blue");
+  // }
 }

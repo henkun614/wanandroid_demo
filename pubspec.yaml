@@ -23,9 +23,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_swiper: ^1.1.6
   path_provider: ^1.6.27
-  provider: ^4.3.3
-  flustars: ^0.3.3
+  # provider: ^4.3.3
+  # flustars: ^0.3.3
 
 
   # The following adds the Cupertino Icons font to your application.

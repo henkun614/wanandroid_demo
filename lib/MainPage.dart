@@ -1,6 +1,4 @@
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wanandroid_demo/home/HomePage.dart';
 import 'package:wanandroid_demo/publics/PublicPage.dart';
 import 'package:wanandroid_demo/questions/QuestionPage.dart';
@@ -10,7 +8,6 @@ import 'package:wanandroid_demo/system/SystemPage.dart';
 import 'package:flutter/services.dart';
 
 import 'ColorsConfig.dart';
-import 'app_provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -33,8 +30,6 @@ class _MainPageState extends State<MainPage>
     SystemPage(),
     QuestionPage()
   ];
-
-  String themeColor;
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +66,13 @@ class _MainPageState extends State<MainPage>
         ),
       ),
       body: Container(
-        color: ColorsConfig.themeColorMap[themeColor],
+        color: ColorsConfig.primaryColor,
         child: _pages[_currentIndex],
       ),
-      drawer: MyDrawer(themeColor),
-      drawerScrimColor: Colors.white,
+      drawer: MyDrawer(),
+      drawerScrimColor: ColorsConfig.primaryColor,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: ColorsConfig.themeColorMap[themeColor],
+        backgroundColor: ColorsConfig.primaryColor,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
           BottomNavigationBarItem(icon: Icon(Icons.crop_square), label: "广场"),
@@ -111,31 +106,19 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
-    _initTheme();
-  }
-
-  Future _initTheme() async {
-    await SpUtil.getInstance();
-    themeColor = SpUtil.getString("key_theme_color", defValue: "blue");
-    Provider.of<AppInfoProvider>(context, listen: false).setTheme(themeColor);
   }
 }
 
 //抽屉组件
 
 class MyDrawer extends StatelessWidget {
-  String _drawerColor;
-  MyDrawer(String color) {
-    _drawerColor = color;
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Drawer(
       elevation: 0.0,
       child: Container(
-        color: ColorsConfig.themeColorMap[_drawerColor],
+        color: ColorsConfig.primaryColor,
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
