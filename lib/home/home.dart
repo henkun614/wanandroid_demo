@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wanandroid_demo/http.dart';
+import 'package:wanandroid_demo/model/banner_model.dart';
 
 //这个页面主要知识点在于
 //1 dio请求数据
@@ -20,21 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   // static const Color PrimaryColor = Color(0xFF16213f);
   static const items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  List<Image> imgs = [
-    Image.network(
-      "https://wanandroid.com/blogimgs/8690f5f9-733a-476a-8ad2-2468d043c2d4.png",
-      fit: BoxFit.cover,
-    ),
-    Image.network(
-        "https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png",
-        fit: BoxFit.cover),
-    Image.network(
-        "https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png",
-        fit: BoxFit.cover),
-    Image.network(
-        "https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png",
-        fit: BoxFit.cover)
-  ];
+  List<Image> imgs = [];
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -47,22 +36,13 @@ class _HomePage extends State<HomePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 Response response = snapshot.data;
+                Map bannerMap = json.decode(response.toString());
+                var banner = HomeBanner.fromJson(bannerMap);
                 if (snapshot.hasError) {
                   Fluttertoast.showToast(msg: snapshot.error.toString());
                 } else {
-                  return Swiper(
-                    itemWidth: double.infinity,
-                    itemHeight: 200,
-                    itemCount: imgs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return imgs[index];
-                    },
-                    autoplay: true,
-                    pagination: new SwiperPagination(
-                      builder: SwiperPagination.dots,
-                    ),
-                    control: new SwiperControl(),
-                  );
+                  return _getSwiper(banner.data);
+                  // Fluttertoast.showToast(msg: banner.data[0].title);
                 }
               }
               return Center(
@@ -70,21 +50,33 @@ class _HomePage extends State<HomePage> {
               );
             },
           ),
-          // Swiper(
-          //   itemWidth: double.infinity,
-          //   itemHeight: 200,
-          //   itemCount: imgs.length,
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return imgs[index];
-          //   },
-          //   autoplay: true,
-          //   pagination: new SwiperPagination(
-          //     builder: SwiperPagination.fraction,
-          //   ),
-          //   control: new SwiperControl(),
-          // ),
         ),
       ],
+    );
+  }
+
+  //根据接口返回的数据生成轮播图
+  Swiper _getSwiper(List<Datum> data) {
+    imgs.clear();
+    for (var i = 0; i < data.length; i++) {
+      var image = Image.network(
+        data[i].imagePath,
+        fit: BoxFit.cover,
+      );
+      imgs.add(image);
+    }
+    return Swiper(
+      itemWidth: double.infinity,
+      itemHeight: 200,
+      itemCount: imgs.length,
+      itemBuilder: (BuildContext context, int index) {
+        return imgs[index];
+      },
+      autoplay: true,
+      pagination: new SwiperPagination(
+        builder: SwiperPagination.dots,
+      ),
+      control: new SwiperControl(),
     );
   }
 }
