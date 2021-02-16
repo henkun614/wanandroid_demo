@@ -1,14 +1,22 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wanandroid_demo/http.dart';
 
-import 'package:wanandroid_demo/MainPage.dart';
-import 'package:wanandroid_demo/SettingsPage.dart';
+import 'package:wanandroid_demo/main_page.dart';
+import 'package:wanandroid_demo/settings.dart';
 
-import 'ColorsConfig.dart';
+import 'colors_config.dart';
 
 void main() {
+  //统一配置dio
+  dio.options.baseUrl = "https://www.wanandroid.com";
+  dio.options.connectTimeout = 5000;
+  dio.options.receiveTimeout = 3000;
+  dio.options.responseType = ResponseType.json;
+
   runApp(MyApp());
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =

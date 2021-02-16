@@ -3,8 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-import 'ColorsConfig.dart';
+import 'colors_config.dart';
 
+//设置页
 class SettingsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wanandroid_demo/home/HomePage.dart';
-import 'package:wanandroid_demo/publics/PublicPage.dart';
-import 'package:wanandroid_demo/questions/QuestionPage.dart';
-import 'package:wanandroid_demo/square/SquarePage.dart';
-import 'package:wanandroid_demo/system/SystemPage.dart';
+import 'package:wanandroid_demo/home/home.dart';
+import 'package:wanandroid_demo/publics/public.dart';
+import 'package:wanandroid_demo/questions/qeustions.dart';
+import 'package:wanandroid_demo/square/squares.dart';
+import 'package:wanandroid_demo/system/systems.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 
-import 'ColorsConfig.dart';
+import 'colors_config.dart';
 
 class MainPage extends StatefulWidget {
   @override
