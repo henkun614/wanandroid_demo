@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   // static const Color PrimaryColor = Color(0xFF16213f);
-  static const items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  // static const items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   List<Image> imgs = [];
   @override
   Widget build(BuildContext context) {

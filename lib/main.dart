@@ -7,6 +7,7 @@ import 'package:wanandroid_demo/http.dart';
 
 import 'package:wanandroid_demo/main_page.dart';
 import 'package:wanandroid_demo/settings.dart';
+import 'package:wanandroid_demo/splash.dart';
 
 import 'colors_config.dart';
 
@@ -33,12 +34,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: '玩Android客户端',
       theme: ThemeData(
         primaryColor: ColorsConfig.primaryColor,
       ),
-      home: MainPage(),
-      routes: {"SettingsPage": (context) => SettingsPage()},
+      home: SpalashPage(),
+      routes: {
+        "SettingsPage": (context) => SettingsPage(),
+        "MainPage": (context) => MainPage()
+      },
     );
   }
 }
